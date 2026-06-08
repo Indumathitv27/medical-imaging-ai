@@ -6,7 +6,7 @@ from datetime import datetime
 from pathlib import Path
 from PIL import Image
 
-from config import RAW_DATA_DIR, LOGS_DIR, ALLOWED_EXTENSIONS, MAX_FILE_SIZE_MB
+from project_config import RAW_DATA_DIR, LOGS_DIR, ALLOWED_EXTENSIONS, MAX_FILE_SIZE_MB
 
 # ── Logging setup ──────────────────────────────────────────
 os.makedirs(LOGS_DIR, exist_ok=True)
