@@ -43,26 +43,22 @@ Try it yourself — upload any chest X-ray image:
 
 ## 🏗️ System Architecture
 
-User uploads chest X-ray
-↓
-FastAPI Backend
-POST /analyze
-↓
-┌─────────────────────┐
-│   Ingestion Layer   │  → Validates file, assigns UUID, stores scan
-└─────────────────────┘
-↓
-┌─────────────────────┐
-│  CV Model Layer     │  → DenseNet121 inference, 18 pathology scores
-└─────────────────────┘
-↓
-┌─────────────────────┐
-│  LLM Agent Layer    │  → Llama 3.3 70B drafts radiology report
-└─────────────────────┘
-↓
-┌─────────────────────┐
-│  Streamlit Dashboard│  → Live findings + report display
-└─────────────────────┘
+## 🏗️ System Architecture
+
+**5-layer modular pipeline — each layer independently deployable:**
+
+| Step | Layer | What it does |
+|---|---|---|
+| 1️⃣ | **Ingestion** | Validates file format, size, integrity → assigns UUID → stores scan |
+| 2️⃣ | **CV Model** | DenseNet121 reads the X-ray → outputs 18 pathology confidence scores |
+| 3️⃣ | **LLM Agent** | Llama 3.3 70B reasons about findings → drafts structured radiology report |
+| 4️⃣ | **REST API** | FastAPI orchestrates all layers → single POST /analyze endpoint |
+| 5️⃣ | **Dashboard** | Streamlit displays scan, findings, and report live |
+
+**Data flow:**
+```
+Upload → Validate → Store → CV Inference → LLM Report → Display
+```
 
 ### ☁️ AWS Production Mapping
 
@@ -121,30 +117,21 @@ The DenseNet121 model detects the following chest pathologies with confidence sc
 ---
 
 ## 🗂️ Project Structure
-medical-imaging-ai/
-├── ingestion/              # Image validation, UUID assignment, audit logging
-│   ├── init.py
-│   └── ingest.py
-├── cv_model/               # DenseNet121 inference pipeline
-│   ├── init.py
-│   └── predict.py
-├── agent/                  # LLM report generation agent
-│   ├── init.py
-│   └── report_agent.py
-├── api/                    # FastAPI backend
-│   ├── init.py
-│   └── main.py
-├── dashboard/              # Streamlit frontend
-│   └── app.py
-├── data/
-│   ├── raw/                # Uploaded scans (gitignored)
-│   └── processed/          # Model outputs
-├── logs/                   # Audit logs — ingestion, model, agent, api
-├── project_config.py       # Centralized configuration
-├── requirements.txt        # All dependencies
-├── Dockerfile              # Container definition
-└── .env                    # API keys (never committed)
 
+| Folder / File | Purpose |
+|---|---|
+| `ingestion/` | File validation, UUID assignment, audit logging |
+| `cv_model/` | DenseNet121 preprocessing and inference |
+| `agent/` | Groq LLM prompt engineering and report generation |
+| `api/` | FastAPI backend — orchestrates full pipeline |
+| `dashboard/` | Streamlit frontend — upload, findings, report display |
+| `data/raw/` | Uploaded scans stored with UUID filenames (gitignored) |
+| `data/processed/` | Model output storage |
+| `logs/` | Audit logs per layer — ingestion, model, agent, api |
+| `project_config.py` | All settings in one place — paths, ports, limits |
+| `requirements.txt` | All Python dependencies with exact versions |
+| `Dockerfile` | Container definition for deployment |
+| `.env` | API keys — never committed to GitHub |
 ---
 
 ## ⚙️ How to Run Locally
