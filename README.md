@@ -1,4 +1,14 @@
+---
+title: Medical Imaging AI
+emoji: 🏥
+colorFrom: blue
+colorTo: green
+sdk: docker
+pinned: false
+---
+
 # 🏥 Medical Imaging AI System
+![Dashboard](screenshot.png)
 
 A production-grade AI system that analyzes chest X-rays, detects pulmonary 
 abnormalities using computer vision, and generates structured radiology 

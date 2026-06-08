@@ -15,7 +15,7 @@ st.markdown("Upload a chest X-ray to receive AI-powered anomaly detection and a 
 st.divider()
 
 # ── API URL ────────────────────────────────────────────────
-API_URL = "http://localhost:8000"
+API_URL = os.getenv("API_URL", "http://localhost:8000")
 
 # ── Sidebar ────────────────────────────────────────────────
 with st.sidebar:
